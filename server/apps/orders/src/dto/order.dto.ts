@@ -1,31 +1,43 @@
 import { InputType, Field, Float } from '@nestjs/graphql';
 
-// @InputType()
-// export class CreateProductInput {
-//   @Field()
-//   imageUrl: string;
+@InputType()
+export class CreateOrderInput {
+  @Field()
+  userId: string;
 
-//   @Field()
-//   name: string;
+  @Field()
+  shippingAddress: string;
 
-//   @Field()
-//   type: string;
+  @Field(() => Float)
+  totalAmount: number;
 
-//   @Field()
-//   netWeight: number;
+  @Field()
+  status: string;
 
-//   @Field(() => Float)
-//   price: number;
-// }
+  @Field(() => [OrderItemInput])
+  orderItems: OrderItemInput[];
+}
 
-// @InputType()
-// export class UpdateProductInput {
-//   @Field({ nullable: true })
-//   imageUrl?: string;
+@InputType()
+export class UpdateOrderInput {
+  @Field({ nullable: true })
+  shippingAddress?: string;
 
-//   @Field({ nullable: true })
-//   name?: string;
+  @Field(() => Float, { nullable: true })
+  totalAmount?: number;
 
-//   @Field(() => Float, { nullable: true })
-//   price?: number;
-// }
+  @Field({ nullable: true })
+  status?: string;
+}
+
+@InputType()
+export class OrderItemInput {
+  @Field()
+  productId: string;
+
+  @Field()
+  quantity: number;
+
+  @Field(() => Float)
+  totalPrice: number;
+}

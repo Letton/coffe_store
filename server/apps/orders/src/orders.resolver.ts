@@ -6,43 +6,46 @@ import {
   ResolveReference,
 } from '@nestjs/graphql';
 import { OrdersService } from './orders.service';
-// import { CreateProductInput, UpdateProductInput } from './dto/order.dto';
-// import { Product } from './entities/order.entity';
+import { Order } from './entities/order.entity';
+import { CreateOrderInput, UpdateOrderInput } from './dto/order.dto';
+import { UseGuards } from '@nestjs/common';
+import { AuthGuard } from './guards/auth.guard';
 
 @Resolver(() => Order)
-export class ProductsResolver {
+export class OrdersResolver {
   constructor(private readonly ordersService: OrdersService) {}
 
-  @Query(() => [Order], { name: 'products' })
-  async findAll() {
-    return this.ordersService.findAll();
-  }
+  // @Query(() => [Order], { name: 'orders' })
+  // async findAll() {
+  //   return this.ordersService.findAll();
+  // }
 
-  @Query(() => Order, { name: 'product', nullable: true })
-  async findOne(@Args('id', { type: () => String }) id: string) {
-    return this.ordersService.findOne(id);
-  }
+  // @Query(() => Order, { name: 'order', nullable: true })
+  // async findOne(@Args('id', { type: () => String }) id: string) {
+  //   return this.ordersService.findOne(id);
+  // }
 
   @Mutation(() => Order)
-  async createOrder(@Args('input') input: CreateOrderInput) {
+  @UseGuards(AuthGuard)
+  async createOrder(@Args('createOrderInput') input: CreateOrderInput) {
     return this.ordersService.create(input);
   }
 
-  @Mutation(() => Order)
-  async updateOrder(
-    @Args('id', { type: () => String }) id: string,
-    @Args('input') input: UpdateOrder,
-  ) {
-    return this.ordersService.update(id, input);
-  }
+  // @Mutation(() => Order)
+  // async updateOrder(
+  //   @Args('id', { type: () => String }) id: string,
+  //   @Args('input') input: UpdateOrderInput,
+  // ) {
+  //   return this.ordersService.update(id, input);
+  // }
 
-  @Mutation(() => Order)
-  async deleteOrder(@Args('id', { type: () => String }) id: string) {
-    return this.ordersService.delete(id);
-  }
+  // @Mutation(() => Order)
+  // async deleteOrder(@Args('id', { type: () => String }) id: string) {
+  //   return this.ordersService.delete(id);
+  // }
 
-  @ResolveReference()
-  resolveReference(reference: { __typename: string; id: string }) {
-    return this.ordersService.findOne(reference.id);
-  }
+  // @ResolveReference()
+  // resolveReference(reference: { __typename: string; id: string }) {
+  //   return this.ordersService.findOne(reference.id);
+  // }
 }

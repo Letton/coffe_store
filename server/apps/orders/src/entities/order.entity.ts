@@ -1,29 +1,43 @@
-import { ObjectType, Field, ID, Float, Directive } from '@nestjs/graphql';
+import { ObjectType, Field, ID, Float } from '@nestjs/graphql';
 
-// @ObjectType()
-// @Directive('@key(fields: "id")')
-// export class Product {
-//   @Field(() => ID)
-//   id: string;
+@ObjectType()
+export class OrderItem {
+  @Field(() => ID)
+  id: string;
 
-//   @Field()
-//   imageUrl: string;
+  @Field()
+  productId: string;
 
-//   @Field()
-//   name: string;
+  @Field()
+  quantity: number;
 
-//   @Field()
-//   netWeight: number;
+  @Field()
+  totalPrice: number;
+}
 
-//   @Field()
-//   type: string;
+@ObjectType()
+export class Order {
+  @Field(() => ID)
+  id: string;
 
-//   @Field(() => Float)
-//   price: number;
+  @Field()
+  userId: string;
 
-//   @Field()
-//   createdAt: string;
+  @Field()
+  shippingAddress: string;
 
-//   @Field()
-//   updatedAt: string;
-// }
+  @Field(() => Float)
+  totalAmount: number;
+
+  @Field()
+  status: string;
+
+  @Field(() => [OrderItem])
+  orderItems: OrderItem[];
+
+  @Field()
+  createdAt: Date;
+
+  @Field()
+  updatedAt: Date;
+}

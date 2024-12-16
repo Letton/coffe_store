@@ -40,9 +40,4 @@ export class ProductsResolver {
   async deleteProduct(@Args('id', { type: () => String }) id: string) {
     return this.productsService.delete(id);
   }
-
-  @ResolveReference()
-  resolveReference(reference: { __typename: string; id: string }) {
-    return this.productsService.findOne(reference.id);
-  }
 }

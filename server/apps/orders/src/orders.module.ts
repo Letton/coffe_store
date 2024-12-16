@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
-import { ProductsService } from './orders.service';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 import {
   ApolloFederationDriver,
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo';
-import { ProductsResolver } from './orders.resolver';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { ProductsService } from 'apps/products/src/products.service';
+import { ProductsResolver } from 'apps/products/src/products.resolver';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -19,6 +20,12 @@ import { PrismaService } from '../../../prisma/prisma.service';
       },
     }),
   ],
-  providers: [ProductsResolver, ProductsService, PrismaService],
+  providers: [
+    ProductsResolver,
+    ProductsService,
+    PrismaService,
+    ConfigService,
+    JwtService,
+  ],
 })
 export class ProductsModule {}
