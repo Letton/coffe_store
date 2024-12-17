@@ -20,6 +20,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useCart } from "@/context/cartContext";
+import { CREATE_ORDER } from "@/graphql/actions/createOrder.action";
+import { toast } from "@/hooks/use-toast";
+import { ApolloError, useMutation } from "@apollo/client";
 // import { useUserContext } from "@/context/userContext";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -27,16 +30,26 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const formSchema = z.object({
-  address: z.string(),
+  address: z.string().refine(
+    (value) => {
+      return value.trim().split(/\s+/).length > 3;
+    },
+    {
+      message: "Введите корректный адресс",
+    }
+  ),
 });
 
 type MakeOrderSchema = z.infer<typeof formSchema>;
 
 export default function CartPage() {
-  const { cart, increaseQuantity, decreaseQuantity, removeFromCart } =
-    useCart();
-
-  // const { } = useUserContext();
+  const {
+    cart,
+    increaseQuantity,
+    decreaseQuantity,
+    removeFromCart,
+    clearCart,
+  } = useCart();
 
   const cartTotal = cart.reduce(
     (total, product) => total + product.price * product.count,
@@ -50,12 +63,45 @@ export default function CartPage() {
     reset,
   } = useForm<MakeOrderSchema>({ resolver: zodResolver(formSchema) });
 
-  const makeOrder = async (data: MakeOrderSchema) => {};
+  const [createOrderMutatuion] = useMutation(CREATE_ORDER);
 
-  const onSubmit = (data: MakeOrderSchema) => {
-    makeOrder({
-      address: data.address,
-    });
+  const onSubmit = async (data: MakeOrderSchema) => {
+    try {
+      const response = await createOrderMutatuion({
+        variables: {
+          shippingAddress: data.address,
+          orderItems: cart.map((product) => ({
+            productId: product.id,
+            quantity: product.count,
+          })),
+        },
+      });
+      toast({
+        title: "Успех!",
+        description: `Заказ ${response?.data?.createOrder?.id} успешно создан`,
+      });
+      clearCart();
+    } catch (error) {
+      handleError(error);
+    }
+    reset();
+  };
+
+  const handleError = (error: unknown) => {
+    if (error instanceof ApolloError) {
+      const errorMessage =
+        error.graphQLErrors?.[0]?.message || "Что-то пошло не так";
+      toast({
+        title: "Ошибка!",
+        description: errorMessage,
+      });
+    } else {
+      console.error(error);
+      toast({
+        title: "Ошибка!",
+        description: "Неизвестная ошибка",
+      });
+    }
   };
 
   return (
@@ -135,6 +181,11 @@ export default function CartPage() {
                     placeholder="Адресс доставки"
                     {...register("address")}
                   />
+                  {errors.address && (
+                    <span className="text-red-500 text-sm">
+                      {errors.address.message}
+                    </span>
+                  )}
                   <Button type="submit">Создать заказ</Button>
                 </div>
               </form>

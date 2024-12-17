@@ -18,8 +18,7 @@ import Link from "next/link";
 const navItems = [
   { label: "Главная", link: "/" },
   { label: "Каталог", link: "/catalog" },
-  { label: "About", link: "/about" },
-  { label: "Contact", link: "/contact" },
+  { label: "FAQ", link: "/faq" },
 ];
 
 export default function Header() {
@@ -57,7 +56,9 @@ export default function Header() {
               <DropdownMenuLabel>Мой аккаунт </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>Профиль</DropdownMenuItem>
+                <Link href={"/account/profile"}>
+                  <DropdownMenuItem>Профиль</DropdownMenuItem>
+                </Link>
               </DropdownMenuGroup>
               <DropdownMenuGroup>
                 <Link href={"/account/cart"}>
@@ -68,14 +69,16 @@ export default function Header() {
                 </Link>
               </DropdownMenuGroup>
               <DropdownMenuGroup>
-                <DropdownMenuItem>Заказы</DropdownMenuItem>
+                <Link href={"/account/orders"}>
+                  <DropdownMenuItem>Заказы</DropdownMenuItem>
+                </Link>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleLogout}>Выйти</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (
-          <Link href="/auth/signin">Sign In</Link>
+          <Link href="/auth/signin">Войти</Link>
         )}
       </nav>
     </header>

@@ -26,9 +26,9 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
       gateway: {
         supergraphSdl: new IntrospectAndCompose({
           subgraphs: [
-            { name: 'users', url: 'http://localhost:4001/graphql' },
-            { name: 'products', url: 'http://localhost:4002/graphql' },
-            { name: 'orders', url: 'http://localhost:4003/graphql' },
+            { name: 'users', url: 'http://users:4001/graphql' },
+            { name: 'products', url: 'http://products:4002/graphql' },
+            { name: 'orders', url: 'http://orders:4003/graphql' },
           ],
         }),
         buildService({ url }) {

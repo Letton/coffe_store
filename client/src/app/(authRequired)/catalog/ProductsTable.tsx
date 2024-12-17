@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { GET_PRODUCTS } from "@/graphql/actions/getProducts";
+import { GET_PRODUCTS } from "@/graphql/actions/getProducts.action";
 import { useQuery } from "@apollo/client";
 import AddToCart from "./AddToCart";
 

@@ -6,9 +6,9 @@ import {
   ApolloFederationDriverConfig,
 } from '@nestjs/apollo';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { ProductsService } from 'apps/products/src/products.service';
-import { ProductsResolver } from 'apps/products/src/products.resolver';
 import { JwtService } from '@nestjs/jwt';
+import { OrdersResolver } from './orders.resolver';
+import { OrdersService } from './orders.service';
 
 @Module({
   imports: [
@@ -21,8 +21,8 @@ import { JwtService } from '@nestjs/jwt';
     }),
   ],
   providers: [
-    ProductsResolver,
-    ProductsService,
+    OrdersResolver,
+    OrdersService,
     PrismaService,
     ConfigService,
     JwtService,
